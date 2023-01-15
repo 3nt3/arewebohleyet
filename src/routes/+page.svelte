@@ -5,12 +5,13 @@
 	dayjs.extend(duration);
 	dayjs.extend(relativeTime);
 
-	let wasLast = false;
 	let loading = true;
 	let lastEntry: any = null;
 	import { initializeApp, type FirebaseOptions } from 'firebase/app';
 	import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore';
 	import { onMount } from 'svelte';
+
+	export let data: any;
 
 	const firebaseConfig: FirebaseOptions = {
 		apiKey: 'AIzaSyCXzsIPaDnRI3eR0Cs_kd2m7G6xpGewP3E',
@@ -28,15 +29,14 @@
 	// add document to collection
 	addDoc(collection(db, 'entries'), {
 		date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-		isThere: Math.random() > 0.5
+		isThere: data.wasJonathan
 	});
 
 	// this runs when the component mounts
 	onMount(async () => {
 		const snapshot = await getDocs(collection(db, 'entries'));
-		const data = snapshot.docs.map((doc) => doc.data());
+		const data = snapshot.docs.map((doc) => doc.data()).filter((entry) => entry.isThere);
 		lastEntry = data[data.length - 1];
-		wasLast = lastEntry.isThere;
 		loading = false;
 	});
 </script>
@@ -47,15 +47,20 @@
 </svelte:head>
 
 <main class="bg-gray-900 w-screen h-screen flex flex-col justify-center items-center gap-4">
-	<h1 class="text-8xl font-bold" class:text-green-600={wasLast} class:text-red-500={!wasLast}>
-		{#if loading}
-			...
-		{:else if wasLast}Yes{:else}No{/if}
+	<h1
+		class="text-8xl font-bold"
+		class:text-green-600={data.wasJonathan}
+		class:text-red-500={!data.wasJonathan}
+	>
+		{#if data.wasJonathan}Yes{:else}No{/if}
 	</h1>
-	{#if !loading}
-		<p class="text-xl text-gray-400 max-w-[300px] text-center">
-			Jonathan was{wasLast ? ' ' : ' not '}the last person at Bohlebots ©
-		</p>
+	<p class="text-xl text-gray-400 max-w-[300px] text-center">
+		Jonathan was{data.wasJonathan ? ' ' : ' not '}the last person at Bohlebots ©
+		{#if !data.wasJonathan}
+			— it was <span class="italic">{data.last}</span>
+		{/if}
+	</p>
+	{#if !loading && lastEntry}
 		<p class="text-lg text-gray-400 max-w-[300px] text-center">
 			He was there {dayjs.duration(dayjs().diff(dayjs(lastEntry.date))).humanize()} ago
 		</p>
