@@ -43,7 +43,7 @@
 
 <svelte:head>
 	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+	<meta name="description" content="Are we bohle yet?" />
 </svelte:head>
 
 <main class="bg-gray-900 w-screen h-screen flex flex-col justify-center items-center gap-4">
