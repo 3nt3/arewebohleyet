@@ -42,7 +42,7 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>Are we bohle yet?</title>
 	<meta name="description" content="Are we bohle yet?" />
 </svelte:head>
 
