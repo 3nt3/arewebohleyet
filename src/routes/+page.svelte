@@ -60,7 +60,7 @@
 			— it was <span class="italic">{data.last}</span>
 		{/if}
 	</p>
-	{#if !loading && lastEntry}
+	{#if !loading && !data.wasJoanthan && lastEntry}
 		<p class="text-lg text-gray-400 max-w-[300px] text-center">
 			He was there {dayjs.duration(dayjs().diff(dayjs(lastEntry.date))).humanize()} ago
 		</p>
