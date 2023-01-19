@@ -9,6 +9,6 @@ export const load: PageLoad = async () => {
 
 	return {
 		last,
-		wasJonathan: last === 'Jonathan'
+		wasJonathan: last === 'jonathan'
 	};
 };
